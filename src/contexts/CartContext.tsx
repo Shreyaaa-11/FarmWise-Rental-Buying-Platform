@@ -51,7 +51,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             setCart(JSON.parse(storedCart));
           }
         } else if (data.cart_items) {
-          setCart(data.cart_items);
+          setCart(data.cart_items as CartItem[]);
         }
       } else {
         // If not logged in, use localStorage
