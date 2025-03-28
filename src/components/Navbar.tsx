@@ -13,10 +13,13 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/contexts/TranslationContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { totalItems } = useCart();
+  const { translate } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
@@ -30,17 +33,17 @@ const Navbar = () => {
             <NavigationMenuList>
               <NavigationMenuItem>
                 <Link to="/" className={navigationMenuTriggerStyle()}>
-                  Home
+                  {translate("Home")}
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link to="/products" className={navigationMenuTriggerStyle()}>
-                  Products
+                  {translate("Products")}
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link to="/about" className={navigationMenuTriggerStyle()}>
-                  About
+                  {translate("About")}
                 </Link>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -49,6 +52,8 @@ const Navbar = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
+          <LanguageSwitcher />
+          
           <Link to="/cart" className="relative">
             <Button variant="ghost" size="icon">
               <ShoppingCart className="h-5 w-5" />
@@ -64,11 +69,11 @@ const Navbar = () => {
             {user ? (
               <div className="flex items-center gap-4">
                 <span className="text-sm">Hi, {user.email?.split('@')[0]}</span>
-                <Button variant="outline" onClick={logout}>Logout</Button>
+                <Button variant="outline" onClick={logout}>{translate("Logout")}</Button>
               </div>
             ) : (
               <Link to="/auth">
-                <Button>Login</Button>
+                <Button>{translate("Login")}</Button>
               </Link>
             )}
           </div>
@@ -94,21 +99,21 @@ const Navbar = () => {
               className="text-lg font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Home
+              {translate("Home")}
             </Link>
             <Link
               to="/products"
               className="text-lg font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Products
+              {translate("Products")}
             </Link>
             <Link
               to="/about"
               className="text-lg font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              About
+              {translate("About")}
             </Link>
             {user ? (
               <>
@@ -117,12 +122,12 @@ const Navbar = () => {
                   logout();
                   setMobileMenuOpen(false);
                 }}>
-                  Logout
+                  {translate("Logout")}
                 </Button>
               </>
             ) : (
               <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                <Button>Login</Button>
+                <Button>{translate("Login")}</Button>
               </Link>
             )}
           </nav>
