@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from '@/contexts/TranslationContext';
 import {
   Form,
   FormControl,
@@ -39,6 +39,7 @@ const Auth = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>("login");
   const [isLoading, setIsLoading] = useState(false);
+  const { translate } = useTranslation();
 
   // Redirect if user is already logged in
   useEffect(() => {
@@ -91,16 +92,16 @@ const Auth = () => {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">FarmGear</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">{translate("FarmGear")}</CardTitle>
           <CardDescription className="text-center">
-            Login or create an account to continue
+            {translate("Login or create an account to continue")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
+              <TabsTrigger value="login">{translate("Login")}</TabsTrigger>
+              <TabsTrigger value="register">{translate("Register")}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login">
@@ -111,9 +112,9 @@ const Auth = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>{translate("Email")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your email" {...field} />
+                          <Input placeholder={translate("Enter your email")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -125,9 +126,9 @@ const Auth = () => {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>{translate("Password")}</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="Enter your password" {...field} />
+                          <Input type="password" placeholder={translate("Enter your password")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -135,7 +136,7 @@ const Auth = () => {
                   />
                   
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Logging in..." : "Login"}
+                    {isLoading ? translate("Logging in...") : translate("Login")}
                   </Button>
                 </form>
               </Form>
@@ -149,9 +150,9 @@ const Auth = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>{translate("Email")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your email" {...field} />
+                          <Input placeholder={translate("Enter your email")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -163,9 +164,9 @@ const Auth = () => {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>{translate("Password")}</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="Enter your password" {...field} />
+                          <Input type="password" placeholder={translate("Enter your password")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -177,9 +178,9 @@ const Auth = () => {
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
+                        <FormLabel>{translate("Confirm Password")}</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="Confirm your password" {...field} />
+                          <Input type="password" placeholder={translate("Confirm your password")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -187,7 +188,7 @@ const Auth = () => {
                   />
                   
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Creating Account..." : "Create Account"}
+                    {isLoading ? translate("Creating Account...") : translate("Create Account")}
                   </Button>
                 </form>
               </Form>
@@ -195,7 +196,7 @@ const Auth = () => {
           </Tabs>
         </CardContent>
         <CardFooter className="flex justify-center text-sm text-gray-500">
-          By continuing, you agree to our Terms of Service and Privacy Policy
+          {translate("By continuing, you agree to our Terms of Service and Privacy Policy")}
         </CardFooter>
       </Card>
     </div>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -9,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Search, Filter } from "lucide-react";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 interface Category {
   id: string;
@@ -31,6 +31,7 @@ interface Equipment {
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { translate } = useTranslation();
   
   // Fetch categories
   const { data: categories } = useQuery({
@@ -78,11 +79,11 @@ const Products = () => {
           {/* Sidebar with filters */}
           <div className="w-full md:w-64 space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-2">Search</h3>
+              <h3 className="text-lg font-medium mb-2">{translate("Search")}</h3>
               <div className="flex w-full items-center space-x-2">
                 <Input
                   type="search"
-                  placeholder="Search products..."
+                  placeholder={translate("Search products...")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -93,14 +94,14 @@ const Products = () => {
             </div>
             
             <div>
-              <h3 className="text-lg font-medium mb-2">Categories</h3>
+              <h3 className="text-lg font-medium mb-2">{translate("Categories")}</h3>
               <div className="space-y-2">
                 <Button
                   variant={selectedCategory === null ? "default" : "outline"}
                   className="w-full justify-start"
                   onClick={() => setSelectedCategory(null)}
                 >
-                  All Categories
+                  {translate("All Categories")}
                 </Button>
                 {categories?.map((category) => (
                   <Button
@@ -109,7 +110,7 @@ const Products = () => {
                     className="w-full justify-start"
                     onClick={() => setSelectedCategory(category.id)}
                   >
-                    {category.name}
+                    {translate(category.name)}
                   </Button>
                 ))}
               </div>
@@ -119,15 +120,15 @@ const Products = () => {
           {/* Main content */}
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold">Products</h1>
+              <h1 className="text-3xl font-bold">{translate("Products")}</h1>
               <div className="text-sm text-muted-foreground">
-                {filteredProducts ? filteredProducts.length : 0} products found
+                {filteredProducts ? filteredProducts.length : 0} {translate("products found")}
               </div>
             </div>
             
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="text-center">Loading products...</div>
+                <div className="text-center">{translate("Loading products...")}</div>
               </div>
             ) : filteredProducts && filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -151,15 +152,15 @@ const Products = () => {
                         </div>
                         {product.is_available_for_rent && product.rental_price_per_day && (
                           <div className="text-sm text-muted-foreground">
-                            Rent: ${product.rental_price_per_day}/day
+                            {translate("Rent")}: ${product.rental_price_per_day}{translate("per day")}
                           </div>
                         )}
                       </CardContent>
                       <CardFooter className="flex justify-between">
                         <div className={`text-sm ${product.stock_quantity > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {product.stock_quantity > 0 ? 'In Stock' : 'Out of Stock'}
+                          {product.stock_quantity > 0 ? translate("In Stock") : translate("Out of Stock")}
                         </div>
-                        <Button size="sm">View Details</Button>
+                        <Button size="sm">{translate("View Details")}</Button>
                       </CardFooter>
                     </Card>
                   </Link>
@@ -167,7 +168,7 @@ const Products = () => {
               </div>
             ) : (
               <div className="text-center py-12 border rounded-lg bg-muted">
-                <p>No products found matching your criteria.</p>
+                <p>{translate("No products found matching your criteria.")}</p>
                 <Button 
                   variant="link" 
                   onClick={() => {
@@ -175,7 +176,7 @@ const Products = () => {
                     setSelectedCategory(null);
                   }}
                 >
-                  Clear filters
+                  {translate("Clear Filters")}
                 </Button>
               </div>
             )}
@@ -189,13 +190,13 @@ const Products = () => {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} FarmGear. All rights reserved.
+                &copy; {new Date().getFullYear()} FarmGear. {translate("All rights reserved.")}
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <Link to="/" className="text-sm text-muted-foreground hover:underline">Home</Link>
-              <Link to="/products" className="text-sm text-muted-foreground hover:underline">Products</Link>
-              <Link to="/about" className="text-sm text-muted-foreground hover:underline">About</Link>
+              <Link to="/" className="text-sm text-muted-foreground hover:underline">{translate("Home")}</Link>
+              <Link to="/products" className="text-sm text-muted-foreground hover:underline">{translate("Products")}</Link>
+              <Link to="/about" className="text-sm text-muted-foreground hover:underline">{translate("About")}</Link>
             </div>
           </div>
         </div>

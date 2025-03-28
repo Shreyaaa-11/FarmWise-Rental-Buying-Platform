@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -6,10 +5,12 @@ import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2, Plus, Minus } from "lucide-react";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const Cart = () => {
   const { cart, updateQuantity, removeFromCart, totalPrice } = useCart();
   const navigate = useNavigate();
+  const { translate } = useTranslation();
 
   if (cart.length === 0) {
     return (
@@ -17,12 +18,12 @@ const Cart = () => {
         <Navbar />
         <main className="flex-grow container py-12 flex flex-col items-center justify-center">
           <div className="text-center max-w-md">
-            <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
+            <h1 className="text-3xl font-bold mb-4">{translate("Your Cart is Empty")}</h1>
             <p className="text-muted-foreground mb-6">
-              Looks like you haven't added any items to your cart yet.
+              {translate("Looks like you haven't added any items to your cart yet.")}
             </p>
             <Link to="/products">
-              <Button size="lg">Browse Products</Button>
+              <Button size="lg">{translate("Browse Products")}</Button>
             </Link>
           </div>
         </main>
@@ -35,7 +36,7 @@ const Cart = () => {
       <Navbar />
       
       <main className="flex-grow container py-8">
-        <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
+        <h1 className="text-3xl font-bold mb-6">{translate("Shopping Cart")}</h1>
         
         <div className="grid gap-8 md:grid-cols-3">
           {/* Cart Items */}
@@ -56,9 +57,9 @@ const Cart = () => {
                   <div className="flex-grow">
                     <h3 className="font-medium">{item.name}</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      {item.rental ? 'Rental' : 'Purchase'}
+                      {item.rental ? translate("Rental") : translate("Purchase")}
                     </p>
-                    <p className="font-medium">${item.price.toLocaleString()}{item.rental ? '/day' : ''}</p>
+                    <p className="font-medium">${item.price.toLocaleString()}{item.rental ? `/${translate("day")}` : ''}</p>
                     
                     {/* Quantity Controls */}
                     <div className="mt-3 flex items-center justify-between">
@@ -101,7 +102,7 @@ const Cart = () => {
                         onClick={() => removeFromCart(item.id)}
                       >
                         <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">Remove</span>
+                        <span className="sr-only">{translate("Remove")}</span>
                       </Button>
                     </div>
                   </div>
@@ -118,26 +119,26 @@ const Cart = () => {
           {/* Order Summary */}
           <div>
             <div className="rounded-lg border p-6 sticky top-20">
-              <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+              <h2 className="text-lg font-semibold mb-4">{translate("Order Summary")}</h2>
               
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="text-muted-foreground">{translate("Subtotal")}</span>
                   <span>${totalPrice.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Tax</span>
-                  <span>Calculated at checkout</span>
+                  <span className="text-muted-foreground">{translate("Tax")}</span>
+                  <span>{translate("Calculated at checkout")}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Shipping</span>
-                  <span>Calculated at checkout</span>
+                  <span className="text-muted-foreground">{translate("Shipping")}</span>
+                  <span>{translate("Calculated at checkout")}</span>
                 </div>
               </div>
               
               <div className="border-t pt-4 mb-6">
                 <div className="flex justify-between text-lg font-semibold">
-                  <span>Total</span>
+                  <span>{translate("Total")}</span>
                   <span>${totalPrice.toLocaleString()}</span>
                 </div>
               </div>
@@ -147,12 +148,12 @@ const Cart = () => {
                 size="lg"
                 onClick={() => navigate('/checkout')}
               >
-                Proceed to Checkout
+                {translate("Proceed to Checkout")}
               </Button>
               
               <div className="mt-4 text-center">
                 <Link to="/products" className="text-sm text-primary hover:underline">
-                  Continue Shopping
+                  {translate("Continue Shopping")}
                 </Link>
               </div>
             </div>
@@ -165,7 +166,7 @@ const Cart = () => {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} FarmGear. All rights reserved.
+                &copy; {new Date().getFullYear()} {translate("FarmGear. All rights reserved.")}
               </p>
             </div>
           </div>

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { Tractor, ShoppingCart, Info } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 interface Equipment {
   id: string;
@@ -22,6 +22,7 @@ interface Equipment {
 
 const Index = () => {
   const { user } = useAuth();
+  const { translate } = useTranslation();
 
   const { data: featuredProducts, isLoading } = useQuery({
     queryKey: ['featuredProducts'],
@@ -46,28 +47,28 @@ const Index = () => {
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="space-y-4">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Quality Farming Equipment for Sale & Rent
+                {translate("Quality Farming Equipment for Sale & Rent")}
               </h1>
               <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                FarmGear provides high-quality agricultural equipment for farms of all sizes. Buy or rent the tools you need to maximize your productivity.
+                {translate("FarmGear provides high-quality agricultural equipment for farms of all sizes. Buy or rent the tools you need to maximize your productivity.")}
               </p>
               <div className="flex flex-col space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
                 <Link to="/products">
                   <Button size="lg" className="gap-2">
-                    <ShoppingCart className="h-4 w-4" /> Browse Products
+                    <ShoppingCart className="h-4 w-4" /> {translate("Browse Products")}
                   </Button>
                 </Link>
                 <Link to="/about">
                   <Button size="lg" variant="outline" className="gap-2">
-                    <Info className="h-4 w-4" /> Learn More
+                    <Info className="h-4 w-4" /> {translate("Learn More")}
                   </Button>
                 </Link>
               </div>
             </div>
             <div className="hidden md:block">
               <img
-                src="https://images.unsplash.com/photo-1627920769796-abee1cdf3ec5?q=80&w=1200"
-                alt="Farm equipment"
+                src="https://images.unsplash.com/photo-1626808642875-0aa545482dfb?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt={translate("Farm equipment")}
                 className="rounded-lg object-cover aspect-[4/3]"
               />
             </div>
@@ -81,17 +82,17 @@ const Index = () => {
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                Featured Equipment
+                {translate("Featured Equipment")}
               </h2>
               <p className="max-w-[800px] text-muted-foreground md:text-xl">
-                Explore our top selling agricultural equipment
+                {translate("Explore our top selling agricultural equipment")}
               </p>
             </div>
           </div>
           <div className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3">
             {isLoading ? (
               <div className="col-span-full flex items-center justify-center py-12">
-                <div className="text-center">Loading featured products...</div>
+                <div className="text-center">{translate("Loading featured products...")}</div>
               </div>
             ) : (
               featuredProducts?.map((product) => (
@@ -113,7 +114,7 @@ const Index = () => {
                         ${product.price.toLocaleString()}
                         {product.is_available_for_rent && (
                           <span className="text-sm font-normal ml-2 text-muted-foreground">
-                            or rent for ${product.rental_price_per_day}/day
+                            {translate("or rent for")} ${product.rental_price_per_day}{translate("per day")}
                           </span>
                         )}
                       </div>
@@ -125,7 +126,7 @@ const Index = () => {
           </div>
           <div className="flex justify-center mt-8">
             <Link to="/products">
-              <Button size="lg">View All Products</Button>
+              <Button size="lg">{translate("View All Products")}</Button>
             </Link>
           </div>
         </div>
@@ -136,10 +137,10 @@ const Index = () => {
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-              Why Choose FarmGear?
+              {translate("Why Choose FarmGear?")}
             </h2>
             <p className="max-w-[800px] text-muted-foreground md:text-xl">
-              Trusted by farmers across the country
+              {translate("Trusted by farmers across the country")}
             </p>
           </div>
           <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-3">
@@ -150,10 +151,10 @@ const Index = () => {
                     <Tractor className="h-6 w-6 text-primary" />
                   </div>
                 </div>
-                <CardTitle className="text-center">Quality Equipment</CardTitle>
+                <CardTitle className="text-center">{translate("Quality Equipment")}</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p>We offer only the best brands and most reliable equipment for your farming needs.</p>
+                <p>{translate("We offer only the best brands and most reliable equipment for your farming needs.")}</p>
               </CardContent>
             </Card>
             <Card>
@@ -163,10 +164,10 @@ const Index = () => {
                     <ShoppingCart className="h-6 w-6 text-primary" />
                   </div>
                 </div>
-                <CardTitle className="text-center">Buy or Rent</CardTitle>
+                <CardTitle className="text-center">{translate("Buy or Rent")}</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p>Flexibility to purchase outright or rent equipment for your specific seasonal needs.</p>
+                <p>{translate("Flexibility to purchase outright or rent equipment for your specific seasonal needs.")}</p>
               </CardContent>
             </Card>
             <Card>
@@ -176,10 +177,10 @@ const Index = () => {
                     <Info className="h-6 w-6 text-primary" />
                   </div>
                 </div>
-                <CardTitle className="text-center">Expert Support</CardTitle>
+                <CardTitle className="text-center">{translate("Expert Support")}</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p>Our team of agricultural experts is always available to help you choose the right equipment.</p>
+                <p>{translate("Our team of agricultural experts is always available to help you choose the right equipment.")}</p>
               </CardContent>
             </Card>
           </div>
@@ -192,13 +193,13 @@ const Index = () => {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} FarmGear. All rights reserved.
+                &copy; {new Date().getFullYear()} FarmGear. {translate("All rights reserved.")}
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <Link to="/" className="text-sm text-muted-foreground hover:underline">Home</Link>
-              <Link to="/products" className="text-sm text-muted-foreground hover:underline">Products</Link>
-              <Link to="/about" className="text-sm text-muted-foreground hover:underline">About</Link>
+              <Link to="/" className="text-sm text-muted-foreground hover:underline">{translate("Home")}</Link>
+              <Link to="/products" className="text-sm text-muted-foreground hover:underline">{translate("Products")}</Link>
+              <Link to="/about" className="text-sm text-muted-foreground hover:underline">{translate("About")}</Link>
             </div>
           </div>
         </div>

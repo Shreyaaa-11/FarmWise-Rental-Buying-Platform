@@ -1,26 +1,27 @@
-
 import React from "react";
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/contexts/CartContext";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const Checkout = () => {
   const { cart, totalPrice } = useCart();
+  const { translate } = useTranslation();
 
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       
       <main className="flex-grow container py-8">
-        <h1 className="text-3xl font-bold mb-6">Checkout</h1>
+        <h1 className="text-3xl font-bold mb-6">{translate("Checkout")}</h1>
         
         <div className="grid gap-8 md:grid-cols-3">
           {/* Order Summary */}
           <div className="md:col-span-2">
             <div className="rounded-lg border p-6">
-              <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+              <h2 className="text-lg font-semibold mb-4">{translate("Order Summary")}</h2>
               
               {cart.length === 0 ? (
-                <p>Your cart is empty</p>
+                <p>{translate("Your cart is empty")}</p>
               ) : (
                 <div className="space-y-4">
                   {cart.map((item) => (
@@ -36,7 +37,7 @@ const Checkout = () => {
                         <div>
                           <p className="font-medium">{item.name}</p>
                           <p className="text-sm text-muted-foreground">
-                            {item.rental ? 'Rental' : 'Purchase'} × {item.quantity}
+                            {item.rental ? translate("Rental") : translate("Purchase")} × {item.quantity}
                           </p>
                         </div>
                       </div>
@@ -50,7 +51,7 @@ const Checkout = () => {
               
               <div className="mt-4 pt-4 border-t">
                 <div className="flex justify-between text-lg font-semibold">
-                  <span>Total Amount</span>
+                  <span>{translate("Total Amount")}</span>
                   <span>${totalPrice.toLocaleString()}</span>
                 </div>
               </div>
@@ -60,23 +61,23 @@ const Checkout = () => {
           {/* Payment Form - Placeholder */}
           <div>
             <div className="rounded-lg border p-6">
-              <h2 className="text-lg font-semibold mb-4">Payment Details</h2>
-              <p className="mb-4 text-muted-foreground">Please enter your payment information to complete your purchase.</p>
+              <h2 className="text-lg font-semibold mb-4">{translate("Payment Details")}</h2>
+              <p className="mb-4 text-muted-foreground">{translate("Please enter your payment information to complete your purchase.")}</p>
               
               <form className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block mb-1 text-sm font-medium">Name on Card</label>
+                  <label htmlFor="name" className="block mb-1 text-sm font-medium">{translate("Name on Card")}</label>
                   <input
                     id="name"
                     type="text"
                     className="w-full px-3 py-2 border rounded-md"
-                    placeholder="John Doe"
+                    placeholder={translate("John Doe")}
                     disabled
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="card" className="block mb-1 text-sm font-medium">Card Number</label>
+                  <label htmlFor="card" className="block mb-1 text-sm font-medium">{translate("Card Number")}</label>
                   <input
                     id="card"
                     type="text"
@@ -88,17 +89,17 @@ const Checkout = () => {
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="expiry" className="block mb-1 text-sm font-medium">Expiry Date</label>
+                    <label htmlFor="expiry" className="block mb-1 text-sm font-medium">{translate("Expiry Date")}</label>
                     <input
                       id="expiry"
                       type="text"
                       className="w-full px-3 py-2 border rounded-md"
-                      placeholder="MM/YY"
+                      placeholder={translate("MM/YY")}
                       disabled
                     />
                   </div>
                   <div>
-                    <label htmlFor="cvc" className="block mb-1 text-sm font-medium">CVC</label>
+                    <label htmlFor="cvc" className="block mb-1 text-sm font-medium">{translate("CVC")}</label>
                     <input
                       id="cvc"
                       type="text"
@@ -114,12 +115,12 @@ const Checkout = () => {
                   className="w-full py-2 px-4 bg-primary text-white rounded-md mt-4 opacity-50 cursor-not-allowed"
                   disabled
                 >
-                  Pay Now (Coming Soon)
+                  {translate("Pay Now (Coming Soon)")}
                 </button>
               </form>
               
               <p className="mt-4 text-sm text-muted-foreground text-center">
-                Stripe integration will be added soon.
+                {translate("Stripe integration will be added soon.")}
               </p>
             </div>
           </div>
@@ -131,7 +132,7 @@ const Checkout = () => {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} FarmGear. All rights reserved.
+                &copy; {new Date().getFullYear()} {translate("FarmGear. All rights reserved.")}
               </p>
             </div>
           </div>
