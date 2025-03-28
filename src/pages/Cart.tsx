@@ -1,0 +1,179 @@
+
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Navbar from "@/components/Navbar";
+import { useCart } from "@/contexts/CartContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Trash2, Plus, Minus } from "lucide-react";
+
+const Cart = () => {
+  const { items, updateQuantity, removeFromCart, totalAmount } = useCart();
+  const navigate = useNavigate();
+
+  if (items.length === 0) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow container py-12 flex flex-col items-center justify-center">
+          <div className="text-center max-w-md">
+            <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
+            <p className="text-muted-foreground mb-6">
+              Looks like you haven't added any items to your cart yet.
+            </p>
+            <Link to="/products">
+              <Button size="lg">Browse Products</Button>
+            </Link>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      
+      <main className="flex-grow container py-8">
+        <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
+        
+        <div className="grid gap-8 md:grid-cols-3">
+          {/* Cart Items */}
+          <div className="md:col-span-2">
+            <div className="rounded-lg border divide-y">
+              {items.map((item) => (
+                <div key={`${item.id}-${item.purchaseType}`} className="p-4 md:p-6 flex flex-col sm:flex-row gap-4">
+                  {/* Product Image */}
+                  <div className="w-full sm:w-24 h-24 rounded-md overflow-hidden flex-shrink-0">
+                    <img
+                      src={item.image || "https://placehold.co/200x200?text=No+Image"}
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  {/* Product Info */}
+                  <div className="flex-grow">
+                    <h3 className="font-medium">{item.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      {item.purchaseType === 'rent' ? 'Rental' : 'Purchase'}
+                    </p>
+                    <p className="font-medium">${item.price.toLocaleString()}{item.purchaseType === 'rent' ? '/day' : ''}</p>
+                    
+                    {/* Quantity Controls */}
+                    <div className="mt-3 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 rounded-r-none"
+                          onClick={() => updateQuantity(item.id, item.purchaseType, Math.max(1, item.quantity - 1))}
+                          disabled={item.quantity <= 1}
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <Input
+                          type="number"
+                          min="1"
+                          value={item.quantity}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value);
+                            if (!isNaN(value) && value > 0) {
+                              updateQuantity(item.id, item.purchaseType, value);
+                            }
+                          }}
+                          className="h-8 w-12 rounded-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        />
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 rounded-l-none"
+                          onClick={() => updateQuantity(item.id, item.purchaseType, item.quantity + 1)}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                        onClick={() => removeFromCart(item.id, item.purchaseType)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        <span className="sr-only">Remove</span>
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {/* Price */}
+                  <div className="text-right font-medium">
+                    ${(item.price * item.quantity).toLocaleString()}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Order Summary */}
+          <div>
+            <div className="rounded-lg border p-6 sticky top-20">
+              <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+              
+              <div className="space-y-2 mb-4">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span>${totalAmount.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Tax</span>
+                  <span>Calculated at checkout</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Shipping</span>
+                  <span>Calculated at checkout</span>
+                </div>
+              </div>
+              
+              <div className="border-t pt-4 mb-6">
+                <div className="flex justify-between text-lg font-semibold">
+                  <span>Total</span>
+                  <span>${totalAmount.toLocaleString()}</span>
+                </div>
+              </div>
+              
+              <Button
+                className="w-full"
+                size="lg"
+                onClick={() => navigate('/checkout')}
+              >
+                Proceed to Checkout
+              </Button>
+              
+              <div className="mt-4 text-center">
+                <Link to="/products" className="text-sm text-primary hover:underline">
+                  Continue Shopping
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+      <footer className="border-t bg-background">
+        <div className="container px-4 py-8 md:px-6">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <div className="text-center md:text-left">
+              <p className="text-sm text-muted-foreground">
+                &copy; {new Date().getFullYear()} FarmGear. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default Cart;
