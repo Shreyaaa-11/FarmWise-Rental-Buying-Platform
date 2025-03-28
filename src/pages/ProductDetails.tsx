@@ -48,12 +48,13 @@ const ProductDetails = () => {
     if (!product) return;
     
     addToCart({
-      id: product.id,
+      product_id: product.id,
       name: product.name,
       price: purchaseType === 'buy' ? product.price : (product.rental_price_per_day || 0),
       image: product.image_url || '',
       quantity: 1,
-      purchaseType
+      rental: purchaseType === 'rent',
+      rental_days: purchaseType === 'rent' ? 1 : undefined,
     });
     
     toast({

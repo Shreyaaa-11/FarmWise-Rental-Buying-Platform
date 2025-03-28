@@ -29,24 +29,18 @@ const Navbar = () => {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link to="/" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Home
-                  </NavigationMenuLink>
+                <Link to="/" className={navigationMenuTriggerStyle()}>
+                  Home
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/products" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Products
-                  </NavigationMenuLink>
+                <Link to="/products" className={navigationMenuTriggerStyle()}>
+                  Products
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/about" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    About
-                  </NavigationMenuLink>
+                <Link to="/about" className={navigationMenuTriggerStyle()}>
+                  About
                 </Link>
               </NavigationMenuItem>
             </NavigationMenuList>

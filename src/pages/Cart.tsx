@@ -1,18 +1,17 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Trash2, Plus, Minus } from "lucide-react";
 
 const Cart = () => {
-  const { items, updateQuantity, removeFromCart, totalAmount } = useCart();
+  const { cart, updateQuantity, removeFromCart, totalPrice } = useCart();
   const navigate = useNavigate();
 
-  if (items.length === 0) {
+  if (cart.length === 0) {
     return (
       <div className="flex flex-col min-h-screen">
         <Navbar />
@@ -42,8 +41,8 @@ const Cart = () => {
           {/* Cart Items */}
           <div className="md:col-span-2">
             <div className="rounded-lg border divide-y">
-              {items.map((item) => (
-                <div key={`${item.id}-${item.purchaseType}`} className="p-4 md:p-6 flex flex-col sm:flex-row gap-4">
+              {cart.map((item) => (
+                <div key={item.id} className="p-4 md:p-6 flex flex-col sm:flex-row gap-4">
                   {/* Product Image */}
                   <div className="w-full sm:w-24 h-24 rounded-md overflow-hidden flex-shrink-0">
                     <img
@@ -57,9 +56,9 @@ const Cart = () => {
                   <div className="flex-grow">
                     <h3 className="font-medium">{item.name}</h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      {item.purchaseType === 'rent' ? 'Rental' : 'Purchase'}
+                      {item.rental ? 'Rental' : 'Purchase'}
                     </p>
-                    <p className="font-medium">${item.price.toLocaleString()}{item.purchaseType === 'rent' ? '/day' : ''}</p>
+                    <p className="font-medium">${item.price.toLocaleString()}{item.rental ? '/day' : ''}</p>
                     
                     {/* Quantity Controls */}
                     <div className="mt-3 flex items-center justify-between">
@@ -68,7 +67,7 @@ const Cart = () => {
                           variant="outline"
                           size="icon"
                           className="h-8 w-8 rounded-r-none"
-                          onClick={() => updateQuantity(item.id, item.purchaseType, Math.max(1, item.quantity - 1))}
+                          onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
                           disabled={item.quantity <= 1}
                         >
                           <Minus className="h-4 w-4" />
@@ -80,7 +79,7 @@ const Cart = () => {
                           onChange={(e) => {
                             const value = parseInt(e.target.value);
                             if (!isNaN(value) && value > 0) {
-                              updateQuantity(item.id, item.purchaseType, value);
+                              updateQuantity(item.id, value);
                             }
                           }}
                           className="h-8 w-12 rounded-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -89,7 +88,7 @@ const Cart = () => {
                           variant="outline"
                           size="icon"
                           className="h-8 w-8 rounded-l-none"
-                          onClick={() => updateQuantity(item.id, item.purchaseType, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
@@ -99,7 +98,7 @@ const Cart = () => {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                        onClick={() => removeFromCart(item.id, item.purchaseType)}
+                        onClick={() => removeFromCart(item.id)}
                       >
                         <Trash2 className="h-4 w-4" />
                         <span className="sr-only">Remove</span>
@@ -124,7 +123,7 @@ const Cart = () => {
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${totalAmount.toLocaleString()}</span>
+                  <span>${totalPrice.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Tax</span>
@@ -139,7 +138,7 @@ const Cart = () => {
               <div className="border-t pt-4 mb-6">
                 <div className="flex justify-between text-lg font-semibold">
                   <span>Total</span>
-                  <span>${totalAmount.toLocaleString()}</span>
+                  <span>${totalPrice.toLocaleString()}</span>
                 </div>
               </div>
               
