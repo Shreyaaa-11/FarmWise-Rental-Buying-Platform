@@ -10,6 +10,11 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import Products from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
+import About from "./pages/About";
+import Checkout from "./pages/Checkout";
+import Cart from "./pages/Cart";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +30,11 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/products/:id" element={<ProductDetails />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
