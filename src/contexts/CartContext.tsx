@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
@@ -18,7 +17,7 @@ export type CartItem = {
 type CartContextType = {
   cart: CartItem[];
   addToCart: (item: Omit<CartItem, 'id'>) => void;
-  removeFromCart: (productId: string) => void;
+  removeFromCart: (productId: string, isRental: boolean) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   updateRentalDays: (productId: string, days: number) => void;
   clearCart: () => void;
@@ -134,22 +133,25 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const removeFromCart = (productId: string) => {
+  const removeFromCart = (productId: string, isRental: boolean) => {
     setCart(prevCart => {
-      const itemToRemove = prevCart.find(item => item.product_id === productId);
+      const itemToRemove = prevCart.find(item => item.product_id === productId && item.rental === isRental);
       if (itemToRemove) {
         toast({
           title: "Item removed",
           description: `${itemToRemove.name} removed from your cart`,
         });
       }
-      return prevCart.filter(item => item.product_id !== productId);
+      return prevCart.filter(item => !(item.product_id === productId && item.rental === isRental));
     });
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      const item = cart.find(item => item.product_id === productId);
+      if (item) {
+        removeFromCart(productId, item.rental);
+      }
       return;
     }
     
