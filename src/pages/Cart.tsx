@@ -68,7 +68,7 @@ const Cart = () => {
                           variant="outline"
                           size="icon"
                           className="h-8 w-8 rounded-r-none"
-                          onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                          onClick={() => updateQuantity(item.product_id, Math.max(1, item.quantity - 1))}
                           disabled={item.quantity <= 1}
                         >
                           <Minus className="h-4 w-4" />
@@ -80,7 +80,7 @@ const Cart = () => {
                           onChange={(e) => {
                             const value = parseInt(e.target.value);
                             if (!isNaN(value) && value > 0) {
-                              updateQuantity(item.id, value);
+                              updateQuantity(item.product_id, value);
                             }
                           }}
                           className="h-8 w-12 rounded-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -89,7 +89,7 @@ const Cart = () => {
                           variant="outline"
                           size="icon"
                           className="h-8 w-8 rounded-l-none"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
@@ -99,7 +99,7 @@ const Cart = () => {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item.product_id)}
                       >
                         <Trash2 className="h-4 w-4" />
                         <span className="sr-only">{translate("Remove")}</span>
