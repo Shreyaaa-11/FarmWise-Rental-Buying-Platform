@@ -18,7 +18,7 @@ type CartContextType = {
   cart: CartItem[];
   addToCart: (item: Omit<CartItem, 'id'>) => void;
   removeFromCart: (productId: string, isRental: boolean) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  updateQuantity: (productId: string, quantity: number, isRental: boolean) => void;
   updateRentalDays: (productId: string, days: number) => void;
   clearCart: () => void;
   totalItems: number;
@@ -146,18 +146,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number, isRental: boolean) => {
     if (quantity <= 0) {
-      const item = cart.find(item => item.product_id === productId);
-      if (item) {
-        removeFromCart(productId, item.rental);
-      }
+      removeFromCart(productId, isRental);
       return;
     }
     
     setCart(prevCart => 
       prevCart.map(item => 
-        item.product_id === productId
+        item.product_id === productId && item.rental === isRental
           ? { ...item, quantity }
           : item
       )
