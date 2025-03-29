@@ -109,10 +109,10 @@ const ProductDetails = () => {
             <div>
               <h1 className="text-3xl font-bold">{product.name}</h1>
               <p className="text-xl font-medium mt-2">
-                ${product.price.toLocaleString()}
+              &#8377;{product.price.toLocaleString()}
                 {product.is_available_for_rent && product.rental_price_per_day && (
                   <span className="text-base font-normal text-muted-foreground ml-2">
-                    {translate("or rent for")} ${product.rental_price_per_day}{translate("per day")}
+                    {translate("or rent for")} &#8377;{product.rental_price_per_day}{translate("per day")}
                   </span>
                 )}
               </p>
@@ -142,7 +142,7 @@ const ProductDetails = () => {
                   <div className="p-4 rounded-lg border bg-card text-card-foreground">
                     <p className="mb-4">{translate("Own this equipment for your farm permanently.")}</p>
                     <div className="flex items-center justify-between">
-                      <div className="text-2xl font-bold">${product.price.toLocaleString()}</div>
+                      <div className="text-2xl font-bold">&#8377;{product.price.toLocaleString()}</div>
                       <Button 
                         onClick={() => handleAddToCart('buy')}
                         disabled={product.stock_quantity < 1 || !product.is_available_for_sale}
@@ -157,7 +157,7 @@ const ProductDetails = () => {
                   <div className="p-4 rounded-lg border bg-card text-card-foreground">
                     <p className="mb-4">{translate("Rent this equipment for your seasonal needs.")}</p>
                     <div className="flex items-center justify-between">
-                      <div className="text-2xl font-bold">${product.rental_price_per_day}{translate("per day")}</div>
+                      <div className="text-2xl font-bold">Rs.{product.rental_price_per_day}{translate("per day")}</div>
                       <Button 
                         onClick={() => handleAddToCart('rent')}
                         disabled={product.stock_quantity < 1 || !product.is_available_for_rent}

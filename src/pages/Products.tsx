@@ -148,11 +148,11 @@ const Products = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="text-lg font-bold">
-                          ${product.price.toLocaleString()}
+                        &#8377;{product.price.toLocaleString()}
                         </div>
                         {product.is_available_for_rent && product.rental_price_per_day && (
                           <div className="text-sm text-muted-foreground">
-                            {translate("Rent")}: ${product.rental_price_per_day}{translate("per day")}
+                            {translate("Rent")}: &#8377;{product.rental_price_per_day}{translate("per day")}
                           </div>
                         )}
                       </CardContent>

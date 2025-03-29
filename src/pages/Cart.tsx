@@ -59,7 +59,7 @@ const Cart = () => {
                     <p className="text-sm text-muted-foreground mb-2">
                       {item.rental ? translate("Rental") : translate("Purchase")}
                     </p>
-                    <p className="font-medium">${item.price.toLocaleString()}{item.rental ? `/${translate("day")}` : ''}</p>
+                    <p className="font-medium">&#8377;{item.price.toLocaleString()}{item.rental ? `/${translate("day")}` : ''}</p>
                     
                     {/* Quantity Controls */}
                     <div className="mt-3 flex items-center justify-between">
@@ -109,7 +109,7 @@ const Cart = () => {
                   
                   {/* Price */}
                   <div className="text-right font-medium">
-                    ${(item.price * item.quantity).toLocaleString()}
+                  &#8377;{(item.price * item.quantity).toLocaleString()}
                   </div>
                 </div>
               ))}
@@ -124,7 +124,7 @@ const Cart = () => {
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{translate("Subtotal")}</span>
-                  <span>${totalPrice.toLocaleString()}</span>
+                  <span>&#8377;{totalPrice.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{translate("Tax")}</span>
@@ -139,7 +139,7 @@ const Cart = () => {
               <div className="border-t pt-4 mb-6">
                 <div className="flex justify-between text-lg font-semibold">
                   <span>{translate("Total")}</span>
-                  <span>${totalPrice.toLocaleString()}</span>
+                  <span>&#8377;{totalPrice.toLocaleString()}</span>
                 </div>
               </div>
               
