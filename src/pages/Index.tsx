@@ -111,10 +111,10 @@ const Index = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">
-                        ${product.price.toLocaleString()}
+                      &#8377;{product.price.toLocaleString()}
                         {product.is_available_for_rent && (
                           <span className="text-sm font-normal ml-2 text-muted-foreground">
-                            {translate("or rent for")} ${product.rental_price_per_day}{translate("per day")}
+                            {translate("or rent for")} &#8377;{product.rental_price_per_day}{translate("per day")}
                           </span>
                         )}
                       </div>
