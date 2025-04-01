@@ -1,12 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from transformers import AutoModelForCausalLM, AutoTokenizer
-import torch
-import os
+import requests
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
+token = os.getenv("HF_API_TOKEN")
 
 app = FastAPI()
 
@@ -19,51 +19,67 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize the model and tokenizer
-model_name = "meta-llama/Llama-2-7b-chat-hf"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    torch_dtype=torch.float16,
-    device_map="auto"
-)
-
 class ChatRequest(BaseModel):
     message: str
+
+# Using OpenAssistant model
+API_URL = "https://api-inference.huggingface.co/models/OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5"
+headers = {"Authorization": f"Bearer {token}"}
 
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
     try:
-        print("1. Request received:", request.message)
+        # OpenAssistant works well with conversation-style prompts
+        prompt = f"""<|prompter|>I need detailed information about farming. Here's my question:
+{request.message}
+
+Please provide a comprehensive answer covering:
+- Detailed explanations
+- Specific examples
+- Technical details
+- Best practices
+- Practical tips
+<|assistant|>"""
         
-        prompt = f"""You are a helpful farming assistant. Please provide short, concise responses.
+        print(f"Sending request for: {request.message}")
         
-        User: {request.message}
-        Assistant:"""
-        print("2. Prompt created:", prompt)
+        response = requests.post(API_URL, headers=headers, json={
+            "inputs": prompt,
+            "parameters": {
+                "max_new_tokens": 500,
+                "temperature": 0.7,
+                "top_p": 0.95,
+                "do_sample": True,
+                "return_full_text": False,
+                "stop": ["<|prompter|>"]  # Stop at the end of assistant's response
+            }
+        })
         
-        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-        print("3. Inputs tokenized")
+        print(f"Response status: {response.status_code}")
         
-        # Fixed parameters to be consistent
-        outputs = model.generate(
-            **inputs,
-            max_length=100,
-            num_return_sequences=1,
-            do_sample=True,  # Changed to True to work with temperature and top_p
-            temperature=0.6,
-            top_p=0.9
-        )
-        print("4. Model generated output")
-        
-        response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-        response = response.split("Assistant:")[-1].strip()
-        print("5. Final response:", response)
-        
-        return {"response": response}
+        if response.status_code == 200:
+            response_data = response.json()
+            if isinstance(response_data, list) and len(response_data) > 0:
+                text = response_data[0].get('generated_text', '')
+                # Clean up the response
+                text = text.replace(prompt, '').strip()
+                # Remove any remaining markers
+                text = text.replace('<|assistant|>', '').replace('<|prompter|>', '').strip()
+                return {"response": text}
+            else:
+                return {"response": "I couldn't generate a detailed response. Please try asking in a different way."}
+        else:
+            print(f"API Error: {response.status_code}", response.text)
+            return {"response": "Sorry, I'm having trouble generating a response."}
+            
     except Exception as e:
-        print("ERROR:", e)
+        print("ERROR:", str(e))
         return {"response": "I apologize, I'm having trouble. Please try again."}
+
+# Add a root endpoint
+@app.get("/")
+async def root():
+    return {"message": "Farming Assistant API is running"}
 
 if __name__ == "__main__":
     import uvicorn
