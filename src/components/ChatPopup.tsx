@@ -32,19 +32,35 @@ export function ChatPopup() {
     setIsLoading(true);
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
+
       const response = await fetch('http://localhost:8000/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ message: userMessage }),
+        signal: controller.signal
       });
 
+      clearTimeout(timeoutId);
       const data = await response.json();
-      setMessages(prev => [...prev, { text: data.response, isUser: false }]);
+      
+      const responseText = typeof data.response === 'string' 
+        ? data.response 
+        : 'Sorry, I received an invalid response format.';
+        
+      setMessages(prev => [...prev, { 
+        text: responseText,
+        isUser: false 
+      }]);
     } catch (error) {
       console.error('Error sending message:', error);
-      setMessages(prev => [...prev, { text: 'Sorry, I encountered an error. Please try again.', isUser: false }]);
+      setMessages(prev => [...prev, { 
+        text: 'Sorry, I encountered an error. Please try again.',
+        isUser: false 
+      }]);
     } finally {
       setIsLoading(false);
     }
