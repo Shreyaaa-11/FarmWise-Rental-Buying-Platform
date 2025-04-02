@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -209,3 +210,138 @@ const Index = () => {
 };
 
 export default Index;
+=======
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import Navbar from "@/components/Navbar";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
+import { Tractor, ShoppingCart, Info } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "@/contexts/TranslationContext";
+
+interface Equipment {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image_url: string;
+  is_available_for_sale: boolean;
+  is_available_for_rent: boolean;
+  rental_price_per_day: number;
+}
+
+const Index = () => {
+  const { user } = useAuth();
+  const { translate } = useTranslation();
+
+  const { data: featuredProducts, isLoading } = useQuery({
+    queryKey: ['featuredProducts'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('equipment')
+        .select('*')
+        .limit(3);
+        
+      if (error) throw error;
+      return data as Equipment[];
+    }
+  });
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      
+      {/* Hero Section */}
+      <section className="relative w-full h-[500px] md:h-[600px] flex items-center justify-center text-center text-white">
+        <img 
+          src="/tomatos.jpg" 
+          alt="Farming Equipment" 
+          className="absolute inset-0 w-full h-full object-cover" 
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-50" />
+        <div className="relative z-10 px-4 md:px-6">
+          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+            {translate("Quality Farming Equipment for Sale & Rent")}
+          </h1>
+          <p className="max-w-[600px] mx-auto mt-4 text-lg">
+            {translate("FarmWise provides high-quality agricultural equipment for farms of all sizes. Buy or rent the tools you need to maximize your productivity.")}
+          </p>
+          <div className="flex flex-col mt-6 space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0 justify-center">
+            <Link to="/products">
+              <Button size="lg" className="gap-2">
+                <ShoppingCart className="h-4 w-4" /> {translate("Browse Products")}
+              </Button>
+            </Link>
+            <Link to="/about">
+              <Button size="lg" className="gap-2 bg-green-600 hover:bg-green-700 text-white">
+                <Info className="h-4 w-4" /> {translate("Learn More")}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className="py-12 md:py-16 bg-background">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="space-y-2">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                {translate("Featured Equipment")}
+              </h2>
+              <p className="max-w-[800px] text-muted-foreground md:text-xl">
+                {translate("Explore our top selling agricultural equipment")}
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3">
+            {isLoading ? (
+              <div className="col-span-full flex items-center justify-center py-12">
+                <div className="text-center">{translate("Loading featured products...")}</div>
+              </div>
+            ) : (
+              featuredProducts?.map((product) => (
+                <Link to={`/products/${product.id}`} key={product.id}>
+                  <Card className="h-full overflow-hidden transition-all hover:border-primary">
+                    <div className="aspect-[16/10] w-full overflow-hidden">
+                      <img
+                        src={product.image_url || "https://placehold.co/400x300?text=No+Image"}
+                        alt={product.name}
+                        className="h-full w-full object-cover transition-all hover:scale-105"
+                      />
+                    </div>
+                    <CardHeader>
+                      <CardTitle>{product.name}</CardTitle>
+                      <CardDescription className="line-clamp-2">{product.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        ${product.price.toLocaleString()}
+                        {product.is_available_for_rent && (
+                          <span className="text-sm font-normal ml-2 text-muted-foreground">
+                            {translate("or rent for")} ${product.rental_price_per_day}{translate("per day")}
+                          </span>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))
+            )}
+          </div>
+          <div className="flex justify-center mt-8">
+            <Link to="/products">
+              <Button size="lg">{translate("View All Products")}</Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Index;
+>>>>>>> Stashed changes
