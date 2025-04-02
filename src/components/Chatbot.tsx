@@ -89,7 +89,7 @@ const Chatbot = () => {
           <Card className="border-none h-full flex flex-col">
             <CardHeader className="pb-2 border-b">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">FarmGear Assistant</h3>
+                <h3 className="text-lg font-semibold">FarmWise Assistant</h3>
                 {/* <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                   <X className="h-5 w-5" />
                 </Button> */}

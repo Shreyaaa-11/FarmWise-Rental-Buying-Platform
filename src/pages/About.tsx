@@ -9,13 +9,14 @@ const About = () => {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       
+
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="bg-primary/5 py-16 md:py-24">
           <div className="container px-4 md:px-6">
             <div className="mx-auto max-w-3xl text-center">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                {translate("About FarmGear")}
+                {translate("About FarmWise")}
               </h1>
               <p className="mt-4 text-muted-foreground md:text-xl">
                 {translate("Supporting farmers with quality equipment since 1985")}
@@ -32,7 +33,7 @@ const About = () => {
                 <h2 className="text-3xl font-bold mb-4">{translate("Our Story")}</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    {translate("FarmGear was founded in 1985 by John and Mary Smith, two farmers who saw a need for high-quality, affordable agricultural equipment in their community.")}
+                    {translate("FarmWise was founded in 1985 by John and Mary Smith, two farmers who saw a need for high-quality, affordable agricultural equipment in their community.")}
                   </p>
                   <p>
                     {translate("What started as a small shop selling basic farm tools has grown into a comprehensive agricultural equipment supplier, serving farmers across the country with both sales and rental options.")}
@@ -116,7 +117,7 @@ const About = () => {
                 {translate("Have questions about our products or services? Our team is here to help!")}
               </p>
               <div className="space-y-4">
-                <p><strong>{translate("Email")}:</strong> info@farmgear.com</p>
+                <p><strong>{translate("Email")}:</strong> info@farmwise.com</p>
                 <p><strong>{translate("Phone")}:</strong> (555) 123-4567</p>
                 <p><strong>{translate("Location")}:</strong> {translate("1234 Farm Road, Rural County, USA")}</p>
               </div>
@@ -130,7 +131,7 @@ const About = () => {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} {translate("FarmGear. All rights reserved.")}
+                &copy; {new Date().getFullYear()} {translate("FarmWise. All rights reserved.")}
               </p>
             </div>
           </div>

@@ -92,7 +92,7 @@ const Auth = () => {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">{translate("FarmGear")}</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">{translate("FarmWise")}</CardTitle>
           <CardDescription className="text-center">
             {translate("Login or create an account to continue")}
           </CardDescription>

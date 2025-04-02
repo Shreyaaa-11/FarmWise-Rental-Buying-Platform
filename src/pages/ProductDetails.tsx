@@ -178,7 +178,7 @@ const ProductDetails = () => {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} FarmGear. {translate("All rights reserved.")}
+                &copy; {new Date().getFullYear()} FarmWise. {translate("All rights reserved.")}
               </p>
             </div>
           </div>
