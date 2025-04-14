@@ -25,7 +25,7 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="text-2xl font-bold text-primary">FarmGear</Link>
+        <Link to="/" className="text-2xl font-bold text-primary">FarmWise</Link>
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex md:gap-10">

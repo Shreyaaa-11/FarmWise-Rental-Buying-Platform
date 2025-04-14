@@ -40,8 +40,8 @@ const translations: Record<string, Record<string, string>> = {
   
   // Home page content
   'Quality Farming Equipment for Sale & Rent': { kn: 'ಮಾರಾಟ ಮತ್ತು ಬಾಡಿಗೆಗೆ ಗುಣಮಟ್ಟದ ಕೃಷಿ ಉಪಕರಣಗಳು' },
-  'FarmGear provides high-quality agricultural equipment for farms of all sizes. Buy or rent the tools you need to maximize your productivity.': 
-    { kn: 'ಫಾರ್ಮ್‌ಗೇರ್ ಎಲ್ಲಾ ಗಾತ್ರದ ಕೃಷಿ ಕ್ಷೇತ್ರಗಳಿಗೆ ಉನ್ನತ ಗುಣಮಟ್ಟದ ಕೃಷಿ ಉಪಕರಣಗಳನ್ನು ಒದಗಿಸುತ್ತದೆ. ನಿಮ್ಮ ಉತ್ಪಾದಕತೆಯನ್ನು ಹೆಚ್ಚಿಸಲು ನಿಮಗೆ ಅಗತ್ಯವಿರುವ ಉಪಕರಣಗಳನ್ನು ಖರೀದಿಸಿ ಅಥವಾ ಬಾಡಿಗೆಗೆ ಪಡೆಯಿರಿ.' },
+  'FarmWise provides high-quality agricultural equipment for farms of all sizes. Buy or rent the tools you need to maximize your productivity.': 
+    { kn: 'ಫಾರ್ಮ್‌ವೈಸ್ ಎಲ್ಲಾ ಗಾತ್ರದ ಕೃಷಿ ಕ್ಷೇತ್ರಗಳಿಗೆ ಉನ್ನತ ಗುಣಮಟ್ಟದ ಕೃಷಿ ಉಪಕರಣಗಳನ್ನು ಒದಗಿಸುತ್ತದೆ. ನಿಮ್ಮ ಉತ್ಪಾದಕತೆಯನ್ನು ಹೆಚ್ಚಿಸಲು ನಿಮಗೆ ಅಗತ್ಯವಿರುವ ಉಪಕರಣಗಳನ್ನು ಖರೀದಿಸಿ ಅಥವಾ ಬಾಡಿಗೆಗೆ ಪಡೆಯಿರಿ.' },
   'Browse Products': { kn: 'ಉತ್ಪನ್ನಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ' },
   'Learn More': { kn: 'ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ' },
   'Featured Equipment': { kn: 'ವಿಶೇಷ ಉಪಕರಣಗಳು' },
@@ -87,7 +87,7 @@ const translations: Record<string, Record<string, string>> = {
   'Enter your email to reset your password': { kn: 'ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ರೀಸೆಟ್ ಮಾಡಲು ನಿಮ್ಮ ಇಮೇಲ್ ನಮೂದಿಸಿ' },
   
   // Features and Benefits
-  'Why Choose FarmGear?': { kn: 'ಫಾರ್ಮ್‌ಗೇರ್ ಅನ್ನು ಏಕೆ ಆಯ್ಕೆ ಮಾಡಬೇಕು?' },
+  'Why Choose FarmWise?': { kn: 'ಫಾರ್ಮ್‌ವೈಸ್ ಅನ್ನು ಏಕೆ ಆಯ್ಕೆ ಮಾಡಬೇಕು?' },
   'Trusted by farmers across the country': { kn: 'ದೇಶಾದ್ಯಂತ ರೈತರಿಂದ ವಿಶ್ವಾಸಾರ್ಹ' },
   'Quality Equipment': { kn: 'ಗುಣಮಟ್ಟದ ಉಪಕರಣಗಳು' },
   'We offer only the best brands and most reliable equipment for your farming needs.': 
@@ -172,7 +172,7 @@ const translations: Record<string, Record<string, string>> = {
   'No reviews yet': { kn: 'ಇನ್ನೂ ಯಾವುದೇ ವಿಮರ್ಶೆಗಳಿಲ್ಲ' },
   
   // Chatbot related
-  'FarmGear Assistant': { kn: 'ಫಾರ್ಮ್‌ಗೇರ್ ಸಹಾಯಕ' },
+  'FarmWise Assistant': { kn: 'ಫಾರ್ಮ್‌ವೈಸ್ ಸಹಾಯಕ' },
   'Type your message...': { kn: 'ನಿಮ್ಮ ಸಂದೇಶವನ್ನು ಟೈಪ್ ಮಾಡಿ...' },
   'Hello! How can I help you with farming equipment today?': { kn: 'ನಮಸ್ಕಾರ! ಇಂದು ಕೃಷಿ ಉಪಕರಣಗಳ ಬಗ್ಗೆ ನಾನು ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?' },
   'Thank you for your question about our farming equipment.': { kn: 'ನಮ್ಮ ಕೃಷಿ ಉಪಕರಣಗಳ ಬಗ್ಗೆ ನಿಮ್ಮ ಪ್ರಶ್ನೆಗೆ ಧನ್ಯವಾದಗಳು.' },
@@ -213,10 +213,10 @@ const translations: Record<string, Record<string, string>> = {
   'Tax': { kn: 'ತೆರಿಗೆ' },
   'Calculated at checkout': { kn: 'ಚೆಕ್‌ಔಟ್‌ನಲ್ಲಿ ಲೆಕ್ಕ ಮಾಡಲಾಗುತ್ತದೆ' },
   'Shipping': { kn: 'ಸಾಗಣೆ' },
-  'Total': { kn: 'ಒಟ್ಟು' },
-  'Proceed to Checkout': { kn: 'ಚೆಕ್‌ಔಟ್‌ಗೆ ಮುಂದುವರಿಯಿರಿ' },
-  'Continue Shopping': { kn: 'ಶಾಪಿಂಗ್ ಮುಂದುವರಿಸಿ' },
-  'FarmGear. All rights reserved.': { kn: 'ಫಾರ್ಮ್‌ಗೇರ್. ಎಲ್ಲ ಹಕ್ಕುಗಳನ್ನು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ.' },
+  ' Total': { kn: 'ಒಟ್ಟು' },
+  ' Proceed to Checkout': { kn: 'ಚೆಕ್‌ಔಟ್‌ಗೆ ಮುಂದುವರಿಯಿರಿ' },
+  ' Continue Shopping': { kn: 'ಶಾಪಿಂಗ್ ಮುಂದುವರಿಸಿ' },
+  'FarmWise. All rights reserved.': { kn: 'ಫಾರ್ಮ್‌ವೈಸ್. ಎಲ್ಲ ಹಕ್ಕುಗಳನ್ನು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ.' },
   'Payment Details': { kn: 'ಪಾವತಿ ವಿವರಗಳು' },
   'Please enter your payment information to complete your purchase.': { kn: 'ನಿಮ್ಮ ಖರೀದಿಯನ್ನು ಪೂರ್ಣಗೊಳಿಸಲು ನಿಮ್ಮ ಪಾವತಿ ಮಾಹಿತಿಯನ್ನು ನಮೂದಿಸಿ.' },
   'Name on Card': { kn: 'ಕಾರ್ಡ್‌ನಲ್ಲಿರುವ ಹೆಸರು' },
@@ -239,7 +239,7 @@ const translations: Record<string, Record<string, string>> = {
   "Login or create an account to continue": {
     kn: "ಮುಂದುವರಿಯಲು ಲಾಗಿನ್ ಮಾಡಿ ಅಥವಾ ಖಾತೆಯನ್ನು ರಚಿಸಿ"
   },
-  "Login": {
+  " Login": {
     kn: "ಲಾಗಿನ್"
   },
   "Register": {
@@ -263,7 +263,7 @@ const translations: Record<string, Record<string, string>> = {
   "Creating Account...": {
     kn: "ಖಾತೆ ರಚಿಸಲಾಗುತ್ತಿದೆ..."
   },
-  "Create Account": {
+  " Create Account": {
     kn: "ಖಾತೆ ರಚಿಸಿ"
   },
   "By continuing, you agree to our Terms of Service and Privacy Policy": {
@@ -278,14 +278,14 @@ const translations: Record<string, Record<string, string>> = {
   "Passwords do not match": {
     kn: "ಪಾಸ್‌ವರ್ಡ್‌ಗಳು ಹೊಂದಾಣಿಕೆಯಾಗುತ್ತಿಲ್ಲ"
   },
-  "About FarmGear": {
-    kn: "ಫಾರ್ಮ್‌ಗೇರ್ ಬಗ್ಗೆ"
+  "About FarmWise": {
+    kn: "ಫಾರ್ಮ್‌ವೈಸ್ ಬಗ್ಗೆ"
   },
   "Supporting farmers with quality equipment since 1985": {
     kn: "1985 ರಿಂದ ಗುಣಮಟ್ಟದ ಉಪಕರಣಗಳೊಂದಿಗೆ ರೈತರಿಗೆ ಬೆಂಬಲ"
   },
-  "FarmGear was founded in 1985 by John and Mary Smith, two farmers who saw a need for high-quality, affordable agricultural equipment in their community.": {
-    kn: "ಫಾರ್ಮ್‌ಗೇರ್ ಅನ್ನು 1985 ರಲ್ಲಿ ಜಾನ್ ಮತ್ತು ಮೇರಿ ಸ್ಮಿತ್ ಅವರು ಸ್ಥಾಪಿಸಿದರು, ಅವರು ತಮ್ಮ ಸಮುದಾಯದಲ್ಲಿ ಹೆಚ್ಚಿನ ಗುಣಮಟ್ಟದ, ಕೈಗೆಟುಕುವ ಕೃಷಿ ಉಪಕರಣಗಳ ಅಗತ್ಯವನ್ನು ಕಂಡರು."
+  "FarmWise was founded in 1985 by John and Mary Smith, two farmers who saw a need for high-quality, affordable agricultural equipment in their community.": {
+    kn: "ಫಾರ್ಮ್‌ವೈಸ್ ಅನ್ನು 1985 ರಲ್ಲಿ ಜಾನ್ ಮತ್ತು ಮೇರಿ ಸ್ಮಿತ್ ಅವರು ಸ್ಥಾಪಿಸಿದರು, ಅವರು ತಮ್ಮ ಸಮುದಾಯದಲ್ಲಿ ಹೆಚ್ಚಿನ ಗುಣಮಟ್ಟದ, ಕೈಗೆಟುಕುವ ಕೃಷಿ ಉಪಕರಣಗಳ ಅಗತ್ಯವನ್ನು ಕಂಡರು."
   },
   "What started as a small shop selling basic farm tools has grown into a comprehensive agricultural equipment supplier, serving farmers across the country with both sales and rental options.": {
     kn: "ಮೂಲ ಕೃಷಿ ಉಪಕರಣಗಳನ್ನು ಮಾರಾಟ ಮಾಡುವ ಸಣ್ಣ ಅಂಗಡಿಯಾಗಿ ಪ್ರಾರಂಭವಾದುದು ಈಗ ದೇಶದಾದ್ಯಂತ ರೈತರಿಗೆ ಮಾರಾಟ ಮತ್ತು ಬಾಡಿಗೆ ಆಯ್ಕೆಗಳೊಂದಿಗೆ ಸೇವೆ ಸಲ್ಲಿಸುವ ಸಮಗ್ರ ಕೃಷಿ ಉಪಕರಣ ಪೂರೈಕೆದಾರರಾಗಿ ಬೆಳೆದಿದೆ."
@@ -326,16 +326,16 @@ const translations: Record<string, Record<string, string>> = {
   "Sales Manager": {
     kn: "ಮಾರಾಟ ವ್ಯವಸ್ಥಾಪಕ"
   },
-  "Customer Support": {
+  " Customer Support": {
     kn: "ಗ್ರಾಹಕ ಬೆಂಬಲ"
   },
-  "Contact Us": {
+  " Contact Us": {
     kn: "ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ"
   },
   "Have questions about our products or services? Our team is here to help!": {
     kn: "ನಮ್ಮ ಉತ್ಪನ್ನಗಳು ಅಥವಾ ಸೇವೆಗಳ ಬಗ್ಗೆ ಪ್ರಶ್ನೆಗಳಿದ್ದೀರಾ? ನಮ್ಮ ತಂಡ ಸಹಾಯ ಮಾಡಲು ಇಲ್ಲಿದೆ!"
   },
-  "Phone": {
+  " Phone": {
     kn: "ಫೋನ್"
   },
   "Location": {
