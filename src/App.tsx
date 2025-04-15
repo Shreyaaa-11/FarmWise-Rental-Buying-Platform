@@ -16,6 +16,7 @@ import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import Cart from "./pages/Cart";
 import { ChatPopup } from "./components/ChatPopup";
+import Ad_chatbot from "./components/Ad_chatbot"; // Import Ad_chatbot
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
                   <Route path="/about" element={<About />} />
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/chatbot" element={<Ad_chatbot />} /> {/* Add this line */}
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

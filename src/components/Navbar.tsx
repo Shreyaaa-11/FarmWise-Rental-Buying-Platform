@@ -1,10 +1,9 @@
-
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, MessageSquare } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -21,12 +20,18 @@ const Navbar = () => {
   const { totalItems } = useCart();
   const { translate } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const navigateToChatbot = () => {
+    navigate("/chatbot"); // Navigate to the chatbot page
+    setMobileMenuOpen(false); // Close mobile menu if open
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="text-2xl font-bold text-primary">FarmWise</Link>
-        
+
         {/* Desktop Navigation */}
         <div className="hidden md:flex md:gap-10">
           <NavigationMenu>
@@ -53,7 +58,7 @@ const Navbar = () => {
         {/* Actions */}
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
-          
+
           <Link to="/cart" className="relative">
             <Button variant="ghost" size="icon">
               <ShoppingCart className="h-5 w-5" />
@@ -68,8 +73,10 @@ const Navbar = () => {
           <div className="hidden md:block">
             {user ? (
               <div className="flex items-center gap-4">
-                <span className="text-sm">Hi, {user.email?.split('@')[0]}</span>
-                <Button variant="outline" onClick={logout}>{translate("Logout")}</Button>
+                <span className="text-sm">Hi, {user.email?.split("@")[0]}</span>
+                <Button variant="outline" onClick={logout}>
+                  {translate("Logout")}
+                </Button>
               </div>
             ) : (
               <Link to="/auth">
@@ -77,6 +84,11 @@ const Navbar = () => {
               </Link>
             )}
           </div>
+
+          {/* Chatbot Icon */}
+          <Button variant="ghost" size="icon" onClick={navigateToChatbot}>
+            <MessageSquare className="h-5 w-5" />
+          </Button>
 
           {/* Mobile menu button */}
           <Button
@@ -117,11 +129,14 @@ const Navbar = () => {
             </Link>
             {user ? (
               <>
-                <div className="text-sm">Hi, {user.email?.split('@')[0]}</div>
-                <Button variant="outline" onClick={() => {
-                  logout();
-                  setMobileMenuOpen(false);
-                }}>
+                <div className="text-sm">Hi, {user.email?.split("@")[0]}</div>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                >
                   {translate("Logout")}
                 </Button>
               </>
