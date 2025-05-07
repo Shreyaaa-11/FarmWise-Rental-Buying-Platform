@@ -1,9 +1,9 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingCart, Menu, X, MessageSquare } from "lucide-react";
+import { ShoppingCart, Menu, X } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -20,12 +20,6 @@ const Navbar = () => {
   const { totalItems } = useCart();
   const { translate } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
-
-  const navigateToChatbot = () => {
-    navigate("/chatbot"); // Navigate to the chatbot page
-    setMobileMenuOpen(false); // Close mobile menu if open
-  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -84,11 +78,6 @@ const Navbar = () => {
               </Link>
             )}
           </div>
-
-          {/* Chatbot Icon */}
-          <Button variant="ghost" size="icon" onClick={navigateToChatbot}>
-            <MessageSquare className="h-5 w-5" />
-          </Button>
 
           {/* Mobile menu button */}
           <Button

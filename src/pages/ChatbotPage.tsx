@@ -1,5 +1,6 @@
+import { ChatPopup } from '@/components/ChatPopup';
 import React from 'react';
-import AdChatbot from '@/components/AdChatbot'; // Import the AdChatbot component
+// import AdChatbot from '@/components/AdChatbot'; // Import the AdChatbot component
 
 export default function ChatbotPage() {
   return (
@@ -10,7 +11,7 @@ export default function ChatbotPage() {
           Ask me anything about farming practices, crops, and agricultural conditions in Karnataka
         </p>
       </div>
-      <AdChatbot />
+       <ChatPopup />
     </div>
   );
 } 

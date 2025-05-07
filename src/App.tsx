@@ -16,6 +16,7 @@ import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import Cart from "./pages/Cart";
 import { ChatPopup } from "./components/ChatPopup";
+import ChatbotPage from "./pages/ChatbotPage";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/chatbot" element={<ChatbotPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <ChatPopup />
