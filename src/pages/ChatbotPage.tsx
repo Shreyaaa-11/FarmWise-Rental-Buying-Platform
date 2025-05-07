@@ -1,5 +1,5 @@
 import React from 'react';
-import { FarmingChatbot } from '@/components/FarmingChatbot';
+import AdChatbot from '@/components/AdChatbot'; // Import the AdChatbot component
 
 export default function ChatbotPage() {
   return (
@@ -10,7 +10,7 @@ export default function ChatbotPage() {
           Ask me anything about farming practices, crops, and agricultural conditions in Karnataka
         </p>
       </div>
-      <FarmingChatbot />
+      <AdChatbot />
     </div>
   );
 } 

@@ -6,8 +6,6 @@ if (!HUGGINGFACE_API_KEY) {
   throw new Error('Hugging Face API key is not configured');
 }
 
-const client = new InferenceClient(HUGGINGFACE_API_KEY);
-
 export async function handleChat(message: string) {
   if (!message) {
     throw new Error('Message is required');

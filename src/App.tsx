@@ -16,40 +16,35 @@ import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import Cart from "./pages/Cart";
 import { ChatPopup } from "./components/ChatPopup";
-import Ad_chatbot from "./components/Ad_chatbot"; // Import Ad_chatbot
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <CartProvider>
-          <TranslationProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/products" element={<Products />} />
-                  <Route path="/products/:id" element={<ProductDetails />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/chatbot" element={<Ad_chatbot />} /> {/* Add this line */}
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-                <ChatPopup />
-              </BrowserRouter>
-            </TooltipProvider>
-          </TranslationProvider>
-        </CartProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <CartProvider>
+        <TranslationProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/products/:id" element={<ProductDetails />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <ChatPopup />
+            </BrowserRouter>
+          </TooltipProvider>
+        </TranslationProvider>
+      </CartProvider>
+    </AuthProvider>
+  </QueryClientProvider>
 );
 
 export default App;
