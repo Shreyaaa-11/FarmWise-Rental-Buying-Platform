@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -43,15 +42,23 @@ const Index = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-muted to-background py-16 md:py-24">
-        <div className="container px-4 md:px-6">
+      <section className="relative">
+        <div className="absolute inset-0">
+          <img
+            src="/hero-banner.jpg"
+            alt={translate("Farm equipment")}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40" /> {/* Overlay for better text readability */}
+        </div>
+        <div className="relative container px-4 md:px-6 py-16 md:py-24">
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
-            <div className="space-y-4">
+            <div className="space-y-4 text-white">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 {translate("Quality Farming Equipment for Sale & Rent")}
               </h1>
-              <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                {translate("FarmGear provides high-quality agricultural equipment for farms of all sizes. Buy or rent the tools you need to maximize your productivity.")}
+              <p className="max-w-[600px] text-white/90 md:text-xl">
+                {translate("FarmWise provides high-quality agricultural equipment for farms of all sizes. Buy or rent the tools you need to maximize your productivity.")}
               </p>
               <div className="flex flex-col space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
                 <Link to="/products">
@@ -60,18 +67,11 @@ const Index = () => {
                   </Button>
                 </Link>
                 <Link to="/about">
-                  <Button size="lg" variant="outline" className="gap-2">
+                  <Button size="lg" variant="outline" className="gap-2 bg-white/10 hover:bg-white/20 text-white border-white/20">
                     <Info className="h-4 w-4" /> {translate("Learn More")}
                   </Button>
                 </Link>
               </div>
-            </div>
-            <div className="hidden md:block">
-              <img
-                src="https://images.unsplash.com/photo-1626808642875-0aa545482dfb?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt={translate("Farm equipment")}
-                className="rounded-lg object-cover aspect-[4/3]"
-              />
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ const Index = () => {
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-              {translate("Why Choose FarmGear?")}
+              {translate("Why Choose FarmWise?")}
             </h2>
             <p className="max-w-[800px] text-muted-foreground md:text-xl">
               {translate("Trusted by farmers across the country")}
@@ -194,7 +194,7 @@ const Index = () => {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} FarmGear. {translate("All rights reserved.")}
+                &copy; {new Date().getFullYear()} FarmWise. {translate("All rights reserved.")}
               </p>
             </div>
             <div className="flex items-center gap-4">
