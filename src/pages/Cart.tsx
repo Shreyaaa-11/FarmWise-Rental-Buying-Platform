@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useTranslation } from "@/contexts/TranslationContext";
+import { format } from "date-fns";
 
 const Cart = () => {
   const { cart, updateQuantity, removeFromCart, totalPrice } = useCart();
@@ -45,9 +46,9 @@ const Cart = () => {
               {cart.map((item) => (
                 <div key={item.id} className="p-4 md:p-6 flex flex-col sm:flex-row gap-4">
                   {/* Product Image */}
-                  <div className="w-full sm:w-24 h-24 rounded-md overflow-hidden flex-shrink-0">
+                  <div className="w-24 h-24 rounded-md overflow-hidden flex-shrink-0">
                     <img
-                      src={item.image || "https://placehold.co/200x200?text=No+Image"}
+                      src={item.image || "https://placehold.co/100x100?text=No+Image"}
                       alt={item.name}
                       className="w-full h-full object-cover"
                     />
@@ -58,8 +59,20 @@ const Cart = () => {
                     <h3 className="font-medium">{item.name}</h3>
                     <p className="text-sm text-muted-foreground mb-2">
                       {item.rental ? translate("Rental") : translate("Purchase")}
+                      {item.rental && item.rental_start_date && item.rental_end_date && (
+                        <span className="ml-2">
+                          ({format(new Date(item.rental_start_date), "MMM dd")} - {format(new Date(item.rental_end_date), "MMM dd, yyyy")})
+                        </span>
+                      )}
                     </p>
-                    <p className="font-medium">&#8377;{item.price.toLocaleString()}{item.rental ? `/${translate("day")}` : ''}</p>
+                    <p className="font-medium">
+                      &#8377;{item.price.toLocaleString()}{item.rental ? `/${translate("day")}` : ''}
+                      {item.rental && item.rental_days && (
+                        <span className="text-sm font-normal ml-2 text-muted-foreground">
+                          × {item.rental_days} {translate("days")} = &#8377;{(item.price * item.rental_days).toLocaleString()}
+                        </span>
+                      )}
+                    </p>
                     
                     {/* Quantity Controls */}
                     <div className="mt-3 flex items-center justify-between">

@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/contexts/CartContext";
 import { useTranslation } from "@/contexts/TranslationContext";
@@ -8,13 +10,18 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
-import { loadRazorpayScript } from "@/lib/razorpay";
+import { format } from "date-fns";
+import { StripePaymentForm } from "@/components/StripePaymentForm";
 
-declare global {
-  interface Window {
-    Razorpay: any;
+// Initialize Stripe
+const stripePromise = (() => {
+  const key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+  if (!key) {
+    console.error('Missing Stripe publishable key');
+    return null;
   }
-}
+  return loadStripe(key);
+})();
 
 const Checkout = () => {
   const { cart, totalPrice, clearCart } = useCart();
@@ -23,31 +30,35 @@ const Checkout = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [addressData, setAddressData] = useState<any>(null);
 
-  useEffect(() => {
-    loadRazorpayScript()
-      .then(() => setIsRazorpayLoaded(true))
-      .catch((error) => {
-        console.error('Error loading Razorpay:', error);
-        toast({
-          title: translate("Error"),
-          description: translate("Failed to load payment system. Please try again later."),
-          variant: "destructive",
-        });
-      });
-  }, [toast, translate]);
+  // Add error handling for missing Stripe
+  if (!stripePromise) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow container py-12 flex flex-col items-center justify-center">
+          <div className="text-center max-w-md">
+            <h1 className="text-3xl font-bold mb-4">{translate("Payment System Error")}</h1>
+            <p className="text-muted-foreground mb-6">
+              {translate("Unable to initialize payment system. Please try again later.")}
+            </p>
+            <Button onClick={() => navigate('/cart')}>
+              {translate("Return to Cart")}
+            </Button>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
-  const handleAddressSubmit = async (addressData: any) => {
-    if (!isRazorpayLoaded) {
-      toast({
-        title: translate("Error"),
-        description: translate("Payment system is not ready. Please try again in a moment."),
-        variant: "destructive",
-      });
-      return;
-    }
+  const handleAddressSubmit = async (data: any) => {
+    setAddressData(data);
+    setShowPaymentForm(true);
+  };
 
+  const handlePaymentSuccess = async (paymentIntentId: string) => {
     setIsLoading(true);
     try {
       // Create order in database
@@ -56,10 +67,11 @@ const Checkout = () => {
         .insert([
           {
             user_id: user?.id,
-            items: cart,
             total_amount: totalPrice,
             shipping_address: addressData,
-            status: 'pending',
+            status: 'paid',
+            payment_intent_id: paymentIntentId,
+            is_rental: cart.some(item => item.rental),
           },
         ])
         .select()
@@ -67,55 +79,30 @@ const Checkout = () => {
 
       if (orderError) throw orderError;
 
-      // Initialize Razorpay
-      const options = {
-        key: process.env.REACT_APP_RAZORPAY_KEY_ID,
-        amount: totalPrice * 100, // amount in paise
-        currency: "INR",
-        name: "FarmWise",
-        description: "Payment for your order",
+      // Create order items
+      const orderItems = cart.map(item => ({
         order_id: order.id,
-        handler: async function (response: any) {
-          try {
-            // Update order with payment details
-            const { error: updateError } = await supabase
-              .from('orders')
-              .update({
-                payment_id: response.razorpay_payment_id,
-                status: 'paid',
-              })
-              .eq('id', order.id);
+        equipment_id: item.product_id,
+        quantity: item.quantity,
+        price: item.price,
+        is_rental: item.rental,
+        rental_start_date: item.rental_start_date,
+        rental_end_date: item.rental_end_date,
+      }));
 
-            if (updateError) throw updateError;
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .insert(orderItems);
 
-            // Clear cart and show success message
-            clearCart();
-            toast({
-              title: translate("Payment successful"),
-              description: translate("Your order has been placed successfully!"),
-            });
-            navigate('/orders');
-          } catch (error) {
-            console.error('Error updating order:', error);
-            toast({
-              title: translate("Error"),
-              description: translate("There was an error processing your payment. Please contact support."),
-              variant: "destructive",
-            });
-          }
-        },
-        prefill: {
-          name: addressData.fullName,
-          email: user?.email,
-          contact: addressData.phoneNumber,
-        },
-        theme: {
-          color: "#4F46E5",
-        },
-      };
+      if (itemsError) throw itemsError;
 
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
+      // Clear cart and show success message
+      clearCart();
+      toast({
+        title: translate("Payment successful"),
+        description: translate("Your order has been placed successfully!"),
+      });
+      navigate('/orders');
     } catch (error) {
       console.error('Error creating order:', error);
       toast({
@@ -126,6 +113,14 @@ const Checkout = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast({
+      title: translate("Payment Error"),
+      description: error,
+      variant: "destructive",
+    });
   };
 
   if (cart.length === 0) {
@@ -150,16 +145,31 @@ const Checkout = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      
-      <main className="flex-grow container py-8">
+      <main className="flex-grow container py-12">
         <h1 className="text-3xl font-bold mb-6">{translate("Checkout")}</h1>
         
         <div className="grid gap-8 md:grid-cols-3">
-          {/* Address Form */}
+          {/* Address Form or Payment Form */}
           <div className="md:col-span-2">
             <div className="rounded-lg border p-6">
-              <h2 className="text-lg font-semibold mb-4">{translate("Shipping Information")}</h2>
-              <AddressForm onSubmit={handleAddressSubmit} isLoading={isLoading} />
+              {!showPaymentForm ? (
+                <>
+                  <h2 className="text-lg font-semibold mb-4">{translate("Shipping Information")}</h2>
+                  <AddressForm onSubmit={handleAddressSubmit} isLoading={isLoading} />
+                </>
+              ) : (
+                <>
+                  <h2 className="text-lg font-semibold mb-4">{translate("Payment Information")}</h2>
+                  <Elements stripe={stripePromise}>
+                    <StripePaymentForm
+                      amount={totalPrice}
+                      onSuccess={handlePaymentSuccess}
+                      onError={handlePaymentError}
+                      isLoading={isLoading}
+                    />
+                  </Elements>
+                </>
+              )}
             </div>
           </div>
           
@@ -182,12 +192,32 @@ const Checkout = () => {
                       <div>
                         <p className="font-medium">{item.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          {item.rental ? translate("Rental") : translate("Purchase")} × {item.quantity}
+                          {item.rental ? (
+                            <>
+                              {translate("Rental")} × {item.quantity}
+                              {item.rental_start_date && item.rental_end_date && (
+                                <span className="ml-2">
+                                  ({format(new Date(item.rental_start_date), "MMM dd")} - {format(new Date(item.rental_end_date), "MMM dd, yyyy")})
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            `${translate("Purchase")} × ${item.quantity}`
+                          )}
                         </p>
                       </div>
                     </div>
                     <p className="font-medium">
-                      &#8377;{(item.price * item.quantity).toLocaleString()}
+                      {item.rental && item.rental_days ? (
+                        <>
+                          &#8377;{(item.price * item.rental_days * item.quantity).toLocaleString()}
+                          <span className="text-sm font-normal ml-2 text-muted-foreground">
+                            (&#8377;{item.price.toLocaleString()}/{translate("day")} × {item.rental_days} {translate("days")})
+                          </span>
+                        </>
+                      ) : (
+                        <>&#8377;{(item.price * item.quantity).toLocaleString()}</>
+                      )}
                     </p>
                   </div>
                 ))}

@@ -12,6 +12,8 @@ export type CartItem = {
   quantity: number;
   rental: boolean;
   rental_days?: number;
+  rental_start_date?: string;
+  rental_end_date?: string;
 };
 
 type CartContextType = {
@@ -20,6 +22,7 @@ type CartContextType = {
   removeFromCart: (productId: string, isRental: boolean) => void;
   updateQuantity: (productId: string, quantity: number, isRental: boolean) => void;
   updateRentalDays: (productId: string, days: number) => void;
+  updateRentalDates: (productId: string, startDate: Date, endDate: Date) => void;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
@@ -34,58 +37,46 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   
   // Load cart from localStorage or database when component mounts or user changes
   useEffect(() => {
-    const loadCart = async () => {
-      if (user) {
-        // If user is logged in, try to load cart from database
+    if (user) {
+      // Load cart from database
+      const loadCart = async () => {
         const { data, error } = await supabase
           .from('carts')
-          .select('*')
+          .select('cart_items')
           .eq('user_id', user.id)
           .single();
         
-        if (error || !data) {
-          // If no cart in database, use localStorage
-          const storedCart = localStorage.getItem('cart');
-          if (storedCart) {
-            setCart(JSON.parse(storedCart));
-          }
-        } else if (data.cart_items) {
+        if (error) {
+          console.error('Error loading cart:', error);
+          return;
+        }
+        
+        if (data?.cart_items) {
           setCart(data.cart_items as CartItem[]);
         }
-      } else {
-        // If not logged in, use localStorage
-        const storedCart = localStorage.getItem('cart');
-        if (storedCart) {
-          setCart(JSON.parse(storedCart));
-        }
-      }
-    };
-    
-    loadCart();
+      };
+      
+      loadCart();
+    } else {
+      setCart([]);
+    }
   }, [user]);
 
   // Save cart to localStorage and database when it changes
   useEffect(() => {
     const saveCart = async () => {
-      // Always save to localStorage
-      localStorage.setItem('cart', JSON.stringify(cart));
+      if (!user) return;
       
-      // If user is logged in, also save to database
-      if (user) {
-        const { error } = await supabase
-          .from('carts')
-          .upsert(
-            { 
-              user_id: user.id, 
-              cart_items: cart,
-              updated_at: new Date().toISOString()
-            },
-            { onConflict: 'user_id' }
-          );
+      const { error } = await supabase
+        .from('carts')
+        .upsert({
+          user_id: user.id,
+          cart_items: cart,
+          updated_at: new Date().toISOString()
+        });
         
-        if (error) {
-          console.error('Error saving cart to database:', error);
-        }
+      if (error) {
+        console.error('Error saving cart:', error);
       }
     };
     
@@ -171,6 +162,21 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const updateRentalDates = (productId: string, startDate: Date, endDate: Date) => {
+    setCart(prevCart => 
+      prevCart.map(item => 
+        item.product_id === productId && item.rental
+          ? { 
+              ...item, 
+              rental_start_date: startDate.toISOString(),
+              rental_end_date: endDate.toISOString(),
+              rental_days: Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+            }
+          : item
+      )
+    );
+  };
+
   const clearCart = () => {
     setCart([]);
     toast({
@@ -196,6 +202,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         removeFromCart,
         updateQuantity,
         updateRentalDays,
+        updateRentalDates,
         clearCart,
         totalItems,
         totalPrice,
