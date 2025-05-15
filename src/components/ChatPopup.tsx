@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageCircle, X, Loader2, RefreshCw, Maximize2, Minimize2, Bot } from 'lucide-react';
-import { handleChat } from '@/pages/api/chat';
+import { handleChat } from '@/api/chat';
 import { useToast } from "@/components/ui/use-toast";
 import {
   Tooltip,

@@ -15,6 +15,7 @@ import ProductDetails from "./pages/ProductDetails";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import Cart from "./pages/Cart";
+import Orders from "./pages/Orders";
 import { ChatPopup } from "./components/ChatPopup";
 import ChatbotPage from "./pages/ChatbotPage";
 
@@ -37,6 +38,7 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/orders" element={<Orders />} />
                 <Route path="/chatbot" element={<ChatbotPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

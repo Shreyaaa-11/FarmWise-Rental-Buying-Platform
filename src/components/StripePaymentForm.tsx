@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { createPaymentIntent } from '@/api/create-payment-intent';
 
 interface StripePaymentFormProps {
   amount: number;
@@ -31,20 +32,8 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = ({
     setProcessing(true);
 
     try {
-      // Create payment intent using our Vercel API
-      const response = await fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ amount }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create payment intent');
-      }
-
-      const { clientSecret } = await response.json();
+      // Create payment intent using our API
+      const { clientSecret } = await createPaymentIntent(amount);
 
       // Confirm the payment
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {

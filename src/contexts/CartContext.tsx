@@ -62,20 +62,43 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
-  // Save cart to localStorage and database when it changes
+  // Save cart to database when it changes
   useEffect(() => {
     const saveCart = async () => {
       if (!user) return;
       
-      const { error } = await supabase
-        .from('carts')
-        .upsert({
-          user_id: user.id,
-          cart_items: cart,
-          updated_at: new Date().toISOString()
-        });
-        
-      if (error) {
+      try {
+        // First, check if a cart exists for this user
+        const { data: existingCart } = await supabase
+          .from('carts')
+          .select('id')
+          .eq('user_id', user.id)
+          .single();
+
+        if (existingCart) {
+          // Update existing cart
+          const { error } = await supabase
+            .from('carts')
+            .update({
+              cart_items: cart,
+              updated_at: new Date().toISOString()
+            })
+            .eq('user_id', user.id);
+
+          if (error) throw error;
+        } else {
+          // Create new cart
+          const { error } = await supabase
+            .from('carts')
+            .insert({
+              user_id: user.id,
+              cart_items: cart,
+              updated_at: new Date().toISOString()
+            });
+
+          if (error) throw error;
+        }
+      } catch (error) {
         console.error('Error saving cart:', error);
       }
     };

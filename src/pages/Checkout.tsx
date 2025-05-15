@@ -61,12 +61,42 @@ const Checkout = () => {
   const handlePaymentSuccess = async (paymentIntentId: string) => {
     setIsLoading(true);
     try {
+      console.log('Payment successful, starting database updates...');
+      console.log('User ID:', user?.id);
+      console.log('Address Data:', addressData);
+
+      if (!user?.id) {
+        throw new Error('User ID is required');
+      }
+
+      // Update profile using auth.uid()
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          address: addressData.address,
+          first_name: addressData.firstName,
+          last_name: addressData.lastName,
+          phone_number: addressData.phone,
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (profileError) {
+        console.error('Profile update error:', profileError);
+        // Continue with order creation even if profile update fails
+        console.log('Continuing with order creation despite profile update error');
+      } else {
+        console.log('Profile updated successfully:', profileData);
+      }
+
       // Create order in database
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert([
           {
-            user_id: user?.id,
+            user_id: user.id,
             total_amount: totalPrice,
             shipping_address: addressData,
             status: 'paid',
@@ -77,7 +107,11 @@ const Checkout = () => {
         .select()
         .single();
 
-      if (orderError) throw orderError;
+      if (orderError) {
+        console.error('Order creation error:', orderError);
+        throw orderError;
+      }
+      console.log('Order created successfully:', order);
 
       // Create order items
       const orderItems = cart.map(item => ({
@@ -90,11 +124,27 @@ const Checkout = () => {
         rental_end_date: item.rental_end_date,
       }));
 
-      const { error: itemsError } = await supabase
+      const { data: itemsData, error: itemsError } = await supabase
         .from('order_items')
-        .insert(orderItems);
+        .insert(orderItems)
+        .select();
 
-      if (itemsError) throw itemsError;
+      if (itemsError) {
+        console.error('Order items creation error:', itemsError);
+        throw itemsError;
+      }
+      console.log('Order items created successfully:', itemsData);
+
+      // Clear the cart in the database
+      const { error: cartError } = await supabase
+        .from('carts')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (cartError) {
+        console.error('Cart deletion error:', cartError);
+        // Don't throw here, as the order is already created
+      }
 
       // Clear cart and show success message
       clearCart();
@@ -104,7 +154,7 @@ const Checkout = () => {
       });
       navigate('/orders');
     } catch (error) {
-      console.error('Error creating order:', error);
+      console.error('Error in handlePaymentSuccess:', error);
       toast({
         title: translate("Error"),
         description: translate("There was an error processing your order. Please try again."),
