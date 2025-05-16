@@ -152,7 +152,7 @@ const Auth = () => {
                       <FormItem>
                         <FormLabel>{translate("Email")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={translate("Enter your email")} {...field} />
+                          <Input placeholder={translate("Enter your email (Only valid email will be accepted)")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

@@ -1,5 +1,5 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
@@ -8,6 +8,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useCart } from "@/contexts/CartContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from "@/contexts/TranslationContext";
+import { RentalDatePicker } from "@/components/RentalDatePicker";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Equipment {
   id: string;
@@ -27,6 +29,9 @@ const ProductDetails = () => {
   const { toast } = useToast();
   const { addToCart } = useCart();
   const { translate } = useTranslation();
+  const [rentalDates, setRentalDates] = useState<{ start: Date; end: Date } | null>(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
   
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id],
@@ -46,7 +51,20 @@ const ProductDetails = () => {
   });
 
   const handleAddToCart = (purchaseType: 'buy' | 'rent') => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
     if (!product) return;
+    
+    if (purchaseType === 'rent' && !rentalDates) {
+      toast({
+        title: translate("Error"),
+        description: translate("Please select rental dates"),
+        variant: "destructive",
+      });
+      return;
+    }
     
     addToCart({
       product_id: product.id,
@@ -55,7 +73,9 @@ const ProductDetails = () => {
       image: product.image_url || '',
       quantity: 1,
       rental: purchaseType === 'rent',
-      rental_days: purchaseType === 'rent' ? 1 : undefined,
+      rental_days: purchaseType === 'rent' ? Math.ceil((rentalDates!.end.getTime() - rentalDates!.start.getTime()) / (1000 * 60 * 60 * 24)) : undefined,
+      rental_start_date: purchaseType === 'rent' ? rentalDates!.start.toISOString() : undefined,
+      rental_end_date: purchaseType === 'rent' ? rentalDates!.end.toISOString() : undefined,
     });
     
     toast({
@@ -64,113 +84,111 @@ const ProductDetails = () => {
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <div className="flex-grow container py-8 flex items-center justify-center">
-          <div className="text-center">{translate("Loading product details...")}</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <div className="flex-grow container py-8 flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold">{translate("Product Not Found")}</h2>
-            <p className="mt-2">{translate("The product you are looking for does not exist.")}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       
       <main className="flex-grow container py-8">
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Product Image */}
-          <div className="rounded-lg overflow-hidden border">
-            <img
-              src={product.image_url || "https://placehold.co/800x600?text=No+Image"}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">{translate("Loading product details...")}</div>
           </div>
-          
-          {/* Product Details */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">{product.name}</h1>
-              <p className="text-xl font-medium mt-2">
-              &#8377;{product.price.toLocaleString()}
-                {product.is_available_for_rent && product.rental_price_per_day && (
-                  <span className="text-base font-normal text-muted-foreground ml-2">
-                    {translate("or rent for")} &#8377;{product.rental_price_per_day}{translate("per day")}
-                  </span>
-                )}
-              </p>
+        ) : product ? (
+          <div className="grid gap-8 md:grid-cols-2">
+            {/* Product Image */}
+            <div className="aspect-square overflow-hidden rounded-lg border bg-muted">
+              <img
+                src={product.image_url || "https://placehold.co/600x600?text=No+Image"}
+                alt={product.name}
+                className="h-full w-full object-cover"
+              />
             </div>
             
-            <div className={`inline-flex px-3 py-1 rounded-full text-sm ${product.stock_quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-              {product.stock_quantity > 0 ? 
-                `${translate("In Stock")} (${product.stock_quantity} ${translate("available")})` : 
-                translate("Out of Stock")}
-            </div>
-            
-            <div className="py-4 border-t border-b">
-              <h3 className="text-lg font-medium mb-2">{translate("Description")}</h3>
-              <p>{product.description}</p>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">{translate("Purchase Options")}</h3>
+            {/* Product Info */}
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-3xl font-bold">{product.name}</h1>
+                <p className="text-xl font-medium mt-2">
+                  &#8377;{product.price.toLocaleString()}
+                  {product.is_available_for_rent && product.rental_price_per_day && (
+                    <span className="text-base font-normal text-muted-foreground ml-2">
+                      {translate("or rent for")} &#8377;{product.rental_price_per_day}{translate("per day")}
+                    </span>
+                  )}
+                </p>
+              </div>
               
-              <Tabs defaultValue="buy" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="buy" disabled={!product.is_available_for_sale}>{translate("Buy")}</TabsTrigger>
-                  <TabsTrigger value="rent" disabled={!product.is_available_for_rent}>{translate("Rent")}</TabsTrigger>
-                </TabsList>
+              <div className={`inline-flex px-3 py-1 rounded-full text-sm ${product.stock_quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                {product.stock_quantity > 0 ? 
+                  `${translate("In Stock")} (${product.stock_quantity} ${translate("available")})` : 
+                  translate("Out of Stock")}
+              </div>
+              
+              <div className="py-4 border-t border-b">
+                <h3 className="text-lg font-medium mb-2">{translate("Description")}</h3>
+                <p>{product.description}</p>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium">{translate("Purchase Options")}</h3>
                 
-                <TabsContent value="buy">
-                  <div className="p-4 rounded-lg border bg-card text-card-foreground">
-                    <p className="mb-4">{translate("Own this equipment for your farm permanently.")}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="text-2xl font-bold">&#8377;{product.price.toLocaleString()}</div>
-                      <Button 
-                        onClick={() => handleAddToCart('buy')}
-                        disabled={product.stock_quantity < 1 || !product.is_available_for_sale}
-                      >
-                        {translate("Add to Cart")}
-                      </Button>
+                <Tabs defaultValue="buy" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="buy" disabled={!product.is_available_for_sale}>{translate("Buy")}</TabsTrigger>
+                    <TabsTrigger value="rent" disabled={!product.is_available_for_rent}>{translate("Rent")}</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="buy">
+                    <div className="p-4 rounded-lg border bg-card text-card-foreground">
+                      <p className="mb-4">{translate("Own this equipment for your farm permanently.")}</p>
+                      <div className="flex items-center justify-between">
+                        <div className="text-2xl font-bold">&#8377;{product.price.toLocaleString()}</div>
+                        <Button 
+                          onClick={() => handleAddToCart('buy')}
+                          disabled={product.stock_quantity < 1 || !product.is_available_for_sale}
+                        >
+                          {translate("Add to Cart")}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="rent">
-                  <div className="p-4 rounded-lg border bg-card text-card-foreground">
-                    <p className="mb-4">{translate("Rent this equipment for your seasonal needs.")}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="text-2xl font-bold">Rs.{product.rental_price_per_day}{translate("per day")}</div>
-                      <Button 
-                        onClick={() => handleAddToCart('rent')}
-                        disabled={product.stock_quantity < 1 || !product.is_available_for_rent}
-                      >
-                        {translate("Add to Cart")}
-                      </Button>
+                  </TabsContent>
+                  
+                  <TabsContent value="rent">
+                    <div className="p-4 rounded-lg border bg-card text-card-foreground">
+                      <p className="mb-4">{translate("Rent this equipment for your seasonal needs.")}</p>
+                      <div className="space-y-4">
+                        <RentalDatePicker 
+                          onDateSelect={(start, end) => setRentalDates({ start, end })}
+                          className="mb-4"
+                        />
+                        <div className="flex items-center justify-between">
+                          <div className="text-2xl font-bold">
+                            &#8377;{product.rental_price_per_day}{translate("per day")}
+                            {rentalDates && (
+                              <span className="text-sm font-normal ml-2 text-muted-foreground">
+                                {translate("Total for")} {Math.ceil((rentalDates.end.getTime() - rentalDates.start.getTime()) / (1000 * 60 * 60 * 24))} {translate("days")}: &#8377;{(product.rental_price_per_day || 0) * Math.ceil((rentalDates.end.getTime() - rentalDates.start.getTime()) / (1000 * 60 * 60 * 24))}
+                              </span>
+                            )}
+                          </div>
+                          <Button 
+                            onClick={() => handleAddToCart('rent')}
+                            disabled={product.stock_quantity < 1 || !product.is_available_for_rent || !rentalDates}
+                          >
+                            {translate("Add to Cart")}
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
+                  </TabsContent>
+                </Tabs>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">{translate("Product not found")}</div>
+          </div>
+        )}
       </main>
       
       <footer className="border-t bg-background">
