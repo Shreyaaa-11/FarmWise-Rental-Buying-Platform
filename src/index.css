@@ -96,7 +96,7 @@
 }
 
 .hero-section {
-  background-image: url('/hero-bg.jpg');
+  /*  background-image: url('/hero-banner.jpg'); */
   background-size: cover;
   background-position: center;
   position: relative;
