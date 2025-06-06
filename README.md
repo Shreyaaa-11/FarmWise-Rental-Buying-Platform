@@ -1,7 +1,34 @@
+# FarmWise – Farming Equipment Rental Platform
+
+FarmWise is a web platform that helps farmers rent and buy farming equipments easily. It is designed with simplicity and accessibility in mind, including a language toggle feature and a built-in AI chatbot to assist users with farming-related queries in English and Kannada.
+
+
+## Features
+
+-  User Authentication using Supabase.
+-  List farming equipment for rent and browse available tools.
+-  Language Toggle Button – Easily switch between English and Kannada interface.
+-  AI Chatbot to answer common farming questions in both languages.
+-  Clean and responsive UI built with React and Tailwind CSS.
+
+
+## Tech Stack
+
+- **Frontend:** React.js, Tailwind CSS, JavaScript  
+- **Backend/Database:** Supabase    
+- **Tools:** Git, GitHub, VS Code  
+
+
+## Getting Started – Run Locally
+
+Follow these steps to run FarmWise on your local machine:
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/sharadhih/FarmWise.git
+cd FarmWise
 
 **Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -20,20 +47,6 @@ npm i
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
 
 ## What technologies are used for this project?
 
