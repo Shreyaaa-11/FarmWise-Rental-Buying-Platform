@@ -14,7 +14,7 @@ FarmWise is a web platform that helps farmers rent and buy farming equipments ea
 
 ## Tech Stack
 
-- **Frontend:** React.js, Tailwind CSS, JavaScript  
+- **Frontend:** React.js, Tailwind CSS, TypeScript  
 - **Backend/Database:** Supabase    
 - **Tools:** Git, GitHub, VS Code  
 
